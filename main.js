@@ -1,5 +1,4 @@
 var AWS = require("aws-sdk");
-AWS.config.update({ region: 'cn-northwest-1' })
 AWS.config.getCredentials(function(err) {
   if (err) {
     console.log(err.stack); // credentials not loaded
@@ -8,12 +7,15 @@ AWS.config.getCredentials(function(err) {
   }
 });
 
-// TODO - Put your tag key and value here
+// Configuration: Put your region, tag key and value here
+AWS.config.update({ region: 'ap-northeast-1' })
 var keystr = "author";
 var valuestr = "xinyuz";
+var instanceFilter = {};
 
+// Tag EC2 instances
 var ec2 = new AWS.EC2();
-var params = {};
+var params = instanceFilter;
 var instanceIds = [];
 ec2.describeInstances(params, function(err, data) {
   if (err) {
@@ -35,6 +37,8 @@ ec2.describeInstances(params, function(err, data) {
 });
 
 /**
+ * 
+ * Tag given instances, if tag key already exists, will overwrite.
  * 
  * https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#createTags-property
  * 

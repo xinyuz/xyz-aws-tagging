@@ -1,13 +1,16 @@
 {
-    "dependencies": {},
-    "name": "xyz-map-tagging-nodejs",
-    "description": "A simple Node.js application illustrating usage of the SDK for JavaScript.",
-    "version": "1.0.1",
-    "main": "main.js",
-    "devDependencies": {},
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "xinyuz",
-    "license": "ISC"
-  }
+  "dependencies": {
+    "aws-sdk": "^2.893.0",
+    "uuid": "^8.3.2"
+  },
+  "name": "xyz-map-tagging-nodejs",
+  "description": "A simple Node.js application illustrating usage of the SDK for JavaScript.",
+  "version": "1.0.1",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xinyuz",
+  "license": "ISC"
+}
