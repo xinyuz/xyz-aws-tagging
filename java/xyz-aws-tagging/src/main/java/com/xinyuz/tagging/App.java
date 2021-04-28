@@ -18,7 +18,6 @@ import software.amazon.awssdk.services.ec2.model.Tag;
 
 /**
  * https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/ec2/model/CreateTagsRequest.html
- *
  */
 public class App {
 
@@ -26,6 +25,7 @@ public class App {
         // TODO Put your region, tag key, value here
         Region region = Region.AP_NORTHEAST_1;
         HashMap<String, String> tagmap = new HashMap<>();
+        tagmap.put("java.author", "xinyuz");
 
         Ec2Client ec2 = Ec2Client.builder()
                                  .region(region)
