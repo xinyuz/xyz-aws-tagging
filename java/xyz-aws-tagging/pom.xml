@@ -93,11 +93,6 @@
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>migrationhubconfig</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.xinyuz.tagging</groupId>
-      <artifactId>aws-tagging</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
 
   </dependencies>
 
