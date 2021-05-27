@@ -1,3 +1,4 @@
 /.idea/
+/java/xyz-aws-tagging/.settings/
 node_modules
 package-lock.json

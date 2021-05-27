@@ -21,24 +21,25 @@ public class AppMigrationHub {
         Region region = Region.AP_NORTHEAST_1;
 
         MigrationHubClient client = MigrationHubClient.builder()
-                                                      .region(region)
-                                                      .build();
+                .region(region)
+                .build();
         listMigrationTask(client);
 
         MigrationHubConfigClient confclient = MigrationHubConfigClient.create();
-        GetHomeRegionResponse response = confclient.getHomeRegion(GetHomeRegionRequest.builder().build());
+        GetHomeRegionResponse    response   = confclient.getHomeRegion(GetHomeRegionRequest.builder().build());
         System.out.println(response);
 
         client.close();
     }
 
+    @SuppressWarnings("unused")
     private static void listDiscoveredResources(MigrationHubClient client) {
         String nextToken = null;
         try {
             do {
                 // DescribeMigrationTaskResponse response = client.describeMigrationTask(DescribeMigrationTaskRequest.builder().migrationTaskName("").progressUpdateStream("").build());
 
-                ListDiscoveredResourcesRequest request = ListDiscoveredResourcesRequest.builder().maxResults(10).nextToken(nextToken).migrationTaskName("%s").progressUpdateStream("SMS").build();
+                ListDiscoveredResourcesRequest  request  = ListDiscoveredResourcesRequest.builder().maxResults(10).nextToken(nextToken).migrationTaskName("%s").progressUpdateStream("SMS").build();
                 ListDiscoveredResourcesResponse response = client.listDiscoveredResources(request);
 
                 System.out.println(response.discoveredResourceList());
@@ -54,7 +55,7 @@ public class AppMigrationHub {
         String nextToken = null;
         try {
             do {
-                ListMigrationTasksRequest request = ListMigrationTasksRequest.builder().maxResults(10).nextToken(nextToken).build();
+                ListMigrationTasksRequest  request  = ListMigrationTasksRequest.builder().maxResults(10).nextToken(nextToken).build();
                 ListMigrationTasksResponse response = client.listMigrationTasks(request);
 
                 System.out.println(response.migrationTaskSummaryList());
