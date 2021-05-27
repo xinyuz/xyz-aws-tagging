@@ -9,9 +9,10 @@ AWS.config.getCredentials(function(err) {
 
 // Configuration: Put your region, tag key and value here
 AWS.config.update({ region: 'ap-northeast-1' })
-var keystr = "author";
-var valuestr = "xinyuz";
-var instanceFilter = {};
+var keystr = "20210510";
+var valuestr = "afternoon";
+var instanceFilter = [{'Name':'launch-time', 'Values':['2021-05-26']}];
+//var instanceFilter = [];
 
 // Tag EC2 instances
 var ec2 = new AWS.EC2();
@@ -31,7 +32,7 @@ ec2.describeInstances(params, function(err, data) {
     });
 
     console.log(instanceIds);
-    createTags(instanceIds, keystr, valuestr);
+    //createTags(instanceIds, keystr, valuestr);
   }
 
 });
