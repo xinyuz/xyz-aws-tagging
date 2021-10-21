@@ -89,6 +89,10 @@
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>ebs</artifactId>
     </dependency>
+<!--     <dependency> -->
+<!--       <groupId>software.amazon.awssdk</groupId> -->
+<!--       <artifactId>es</artifactId> -->
+<!--     </dependency> -->
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>migrationhub</artifactId>

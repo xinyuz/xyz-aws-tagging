@@ -36,22 +36,24 @@ public class App {
         Region region = Region.AP_NORTHEAST_1;
         //Region region = Region.CN_NORTHWEST_1;
         HashMap<String, String> tagmap = new HashMap<>();
-        tagmap.put("updated.date", "20210527");
+        tagmap.put("map-migrated", "d-server-20211020");
 
         Collection<Tag> tagList = new ArrayList<Tag>();
         for (Map.Entry<String, String> me : tagmap.entrySet()) {
             tagList.add(Tag.builder().key(me.getKey()).value(me.getValue()).build());
         }
 
-        //tagEc2(region, tagList);
+        tagEc2(region, tagList);
         tagEBS(region, tagList);
+        tagES(region, tagList);
+        tagFSx(region, tagList);
     }
 
     private static void tagEBS(Region region, Collection<Tag> tagList) {
-        Ec2Client ec2 = Ec2Client.builder()
-                                 .region(region)
-                                 .build();
-        DescribeVolumesRequest request = DescribeVolumesRequest.builder().build();
+        Ec2Client               ec2      = Ec2Client.builder()
+                .region(region)
+                .build();
+        DescribeVolumesRequest  request  = DescribeVolumesRequest.builder().build();
         DescribeVolumesResponse response = ec2.describeVolumes(request);
 
         if (response.volumes() == null || response.volumes().size() == 0) {
@@ -80,34 +82,41 @@ public class App {
             }
         }
 
-        CreateTagsRequest tagsRequest = CreateTagsRequest.builder().resources(resourceList).tags(tagList).build();
+        CreateTagsRequest  tagsRequest  = CreateTagsRequest.builder().resources(resourceList).tags(tagList).build();
         CreateTagsResponse tagsResponse = ec2.createTags(tagsRequest);
         System.out.printf("Tag resources %s, result is %s", resourceList, tagsResponse);
+    }
 
+    private static void tagES(Region region, Collection<Tag> tagList) {
+    }
+
+    private static void tagFSx(Region region, Collection<Tag> tagList) {
     }
 
     private static void tagEc2(Region region, Collection<Tag> tagList) {
         Ec2Client ec2 = Ec2Client.builder()
-                                 .region(region)
-                                 .build();
+                .region(region)
+                .build();
 
         Collection<String> resourceList = new ArrayList<>();
         resourceList.addAll(listEC2Instances(ec2));
 
         CreateTagsRequest request = CreateTagsRequest.builder().resources(resourceList).tags(tagList).build();
-        CreateTagsResponse response = ec2.createTags(request);
-        System.out.printf("Tag resources %s, result is %s", resourceList, response);
+        if (resourceList != null && resourceList.size() > 0) {
+            CreateTagsResponse response = ec2.createTags(request);
+            System.out.printf("Tag resources %s, result is %s", resourceList, response);
+        }
 
         ec2.close();
     }
 
     private static Collection<? extends String> listEC2Instances(Ec2Client ec2) {
         Collection<String> instanceIdList = new ArrayList<>();
-        String nextToken = null;
+        String             nextToken      = null;
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
-        String yesterdayStr = new SimpleDateFormat("yyyy-MM-dd").format(cal);
+        String yesterdayStr = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
         try {
             do {
 

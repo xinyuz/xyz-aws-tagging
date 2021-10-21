@@ -1,10 +1,15 @@
 # aws-tagging-nodejs
 
 ## Purpose
-Create tag for all EC2 instances.
+Sample code of creating tags for aws resources.
+
+- Java version create tags for EC2, EBS, ES and FSX.
+- Nodejs version create tags for EC2 only.
 
 
-## Prerequisite
+
+
+## Nodejs - Prerequisite
 
 1. Install Node.js
 - https://nodejs.org/en/download/
@@ -16,7 +21,7 @@ npm install aws-sdk
 ```
 
 
-## Usage
+## Nodejs - Usage
 Run ```main.js``` by node:
 ```
 node main.js
