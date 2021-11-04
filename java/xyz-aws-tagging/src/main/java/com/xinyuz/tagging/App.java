@@ -22,24 +22,45 @@ import software.amazon.awssdk.services.ec2.model.Reservation;
 import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.awssdk.services.ec2.model.Volume;
 import software.amazon.awssdk.services.ec2.model.VolumeAttachment;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
 
 /**
+ * 
+ * EC2部分
  * https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/ec2/model/CreateTagsRequest.html
  * https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/ec2/model/DescribeInstancesRequest.html
  * https://github.com/aws/aws-cli/issues/1209
  * https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/describe-instances.html
+ * 
+ * S3 部分
+ * https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/s3/model/Tagging.html
+ * https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-s3-objects.html
+ * https://github.com/aws/aws-sdk-java-v2/blob/master/services/s3/src/it/java/software/amazon/awssdk/services/s3/S3IntegrationTestBase.java
+ * https://github.com/aws/aws-sdk-java-v2/blob/master/services/s3/src/it/java/software/amazon/awssdk/services/s3/ObjectTaggingIntegrationTest.java
+ * 
+ * tag resource
+ * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html
+ * 
+ * Junit 5
+ * https://junit.org/junit5/docs/current/user-guide/
+ * 
+ * 
+ * 
  */
 public class App {
 
-    public static void main(String[] args) {
-        // TODO Put your region, tag key, value here
-        Region region = Region.AP_NORTHEAST_1;
-        //Region region = Region.CN_NORTHWEST_1;
-        HashMap<String, String> tagmap = new HashMap<>();
-        tagmap.put("map-migrated", "d-server-20211020");
+    // TODO Put your region, tag key, value here
+    static Region region = Region.AP_NORTHEAST_1;
+    // static Region region = Region.CN_NORTHWEST_1;
+    static HashMap<String, String> tags = new HashMap<>();
+    static {
+        tags.put("map-migrated", "d-server-20211020");
+    }
 
+    public static void main(String[] args) {
         Collection<Tag> tagList = new ArrayList<Tag>();
-        for (Map.Entry<String, String> me : tagmap.entrySet()) {
+        for (Map.Entry<String, String> me : tags.entrySet()) {
             tagList.add(Tag.builder().key(me.getKey()).value(me.getValue()).build());
         }
 
@@ -47,6 +68,7 @@ public class App {
         tagEBS(region, tagList);
         tagES(region, tagList);
         tagFSx(region, tagList);
+        tagS3();
     }
 
     private static void tagEBS(Region region, Collection<Tag> tagList) {
@@ -87,12 +109,6 @@ public class App {
         System.out.printf("Tag resources %s, result is %s", resourceList, tagsResponse);
     }
 
-    private static void tagES(Region region, Collection<Tag> tagList) {
-    }
-
-    private static void tagFSx(Region region, Collection<Tag> tagList) {
-    }
-
     private static void tagEc2(Region region, Collection<Tag> tagList) {
         Ec2Client ec2 = Ec2Client.builder()
                 .region(region)
@@ -110,6 +126,13 @@ public class App {
         ec2.close();
     }
 
+    /**
+     * 确定打标签的EC2实例的范围
+     * 例子里的代码是通过launch-time，来查找昨天以来开启的资源
+     * 
+     * @param ec2
+     * @return
+     */
     private static Collection<? extends String> listEC2Instances(Ec2Client ec2) {
         Collection<String> instanceIdList = new ArrayList<>();
         String             nextToken      = null;
@@ -119,8 +142,7 @@ public class App {
         String yesterdayStr = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
         try {
             do {
-
-                DescribeInstancesRequest request = DescribeInstancesRequest.builder().filters(Filter.builder().name("launch-time").values(yesterdayStr + "*").build()).maxResults(6).nextToken(nextToken).build();
+                DescribeInstancesRequest request = DescribeInstancesRequest.builder().filters(Filter.builder().name("launch-time").values(yesterdayStr + "*").build()).maxResults(20).nextToken(nextToken).build();
                 //DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(6).nextToken(nextToken).build();
                 DescribeInstancesResponse response = ec2.describeInstances(request);
 
@@ -157,5 +179,17 @@ public class App {
             System.exit(1);
         }
         return instanceIdList;
+    }
+
+    private static void tagS3() {
+        // TODO Auto-generated method stub
+        //ObjectTagging
+        S3ClientBuilder s3b = S3Client.builder();
+    }
+
+    private static void tagES(Region region, Collection<Tag> tagList) {
+    }
+
+    private static void tagFSx(Region region, Collection<Tag> tagList) {
     }
 }
