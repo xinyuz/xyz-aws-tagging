@@ -66,9 +66,9 @@ public class App {
 
         tagEc2(region, tagList);
         tagEBS(region, tagList);
-        tagES(region, tagList);
-        tagFSx(region, tagList);
-        tagS3();
+        //tagES(region, tagList);
+        //tagFSx(region, tagList);
+        //tagS3();
     }
 
     private static void tagEBS(Region region, Collection<Tag> tagList) {
@@ -181,15 +181,17 @@ public class App {
         return instanceIdList;
     }
 
+    @SuppressWarnings("unused")
     private static void tagS3() {
-        // TODO Auto-generated method stub
         //ObjectTagging
         S3ClientBuilder s3b = S3Client.builder();
     }
 
+    @SuppressWarnings("unused")
     private static void tagES(Region region, Collection<Tag> tagList) {
     }
 
+    @SuppressWarnings("unused")
     private static void tagFSx(Region region, Collection<Tag> tagList) {
     }
 }
