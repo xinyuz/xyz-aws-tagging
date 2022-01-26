@@ -1,5 +1,8 @@
 package com.xinyuz.tagging;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Ec2Exception;
 import software.amazon.awssdk.services.migrationhub.MigrationHubClient;
@@ -16,6 +19,7 @@ import software.amazon.awssdk.services.migrationhubconfig.model.GetHomeRegionRes
  * https://github.com/aws/aws-sdk-java
  */
 public class AppMigrationHub {
+    static Logger logger = LogManager.getLogger(AppMigrationHub.class);
 
     public static void main(String[] args) {
         Region region = Region.AP_NORTHEAST_1;
@@ -27,7 +31,7 @@ public class AppMigrationHub {
 
         MigrationHubConfigClient confclient = MigrationHubConfigClient.create();
         GetHomeRegionResponse    response   = confclient.getHomeRegion(GetHomeRegionRequest.builder().build());
-        System.out.println(response);
+        logger.info(response.toString());
 
         client.close();
     }
@@ -46,7 +50,7 @@ public class AppMigrationHub {
                 nextToken = response.nextToken();
             } while (nextToken != null);
         } catch (Ec2Exception e) {
-            System.err.println(e.awsErrorDetails().errorMessage());
+            logger.error(e.awsErrorDetails().errorMessage());
             System.exit(1);
         }
     }
@@ -62,7 +66,7 @@ public class AppMigrationHub {
                 nextToken = response.nextToken();
             } while (nextToken != null);
         } catch (Ec2Exception e) {
-            System.err.println(e.awsErrorDetails().errorMessage());
+            logger.error(e.awsErrorDetails().errorMessage());
             System.exit(1);
         }
     }
